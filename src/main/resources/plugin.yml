@@ -6,3 +6,13 @@ author: PikaMug
 
 main: me.pikamug.questsconverter.QuestsConverter
 depend: [Quests]
+
+permissions:
+  qconvert.all:
+    description: Access all QuestsConverter functionality
+    default: op
+commands:
+  qconvert:
+    description: Convert all the things
+    permission: qconvert.all
+    aliases: qcon
