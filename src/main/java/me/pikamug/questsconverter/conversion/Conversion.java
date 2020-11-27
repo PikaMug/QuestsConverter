@@ -59,6 +59,7 @@ public class Conversion {
                 }
             } catch (final Exception e) {
                 plugin.getLogger().severe("Failed to transfer data of Quester " + uuid.toString());
+                e.printStackTrace();
             }
         }
         entry.close();
