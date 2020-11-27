@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableList;
 
 public enum ConversionType {
     
-    STORAGE("Storage", "storage");
+    PLAYERDATA("PlayerData", "Playerdata", "playerdata");
     
     private final String name;
 

@@ -34,30 +34,33 @@ public class Conversion {
 
     public CompletableFuture<Boolean> beginConversion(final ConversionType type, final StorageType source, final StorageType target) {
         return makeFuture(() -> {
-            if (type.equals(ConversionType.STORAGE)) {
-                return convertStorage(type, source, target);
+            if (type.equals(ConversionType.PLAYERDATA)) {
+                return convertPlayerData(type, source, target);
             }
             return false;
         });
     }
     
-    private boolean convertStorage(final ConversionType type, final StorageType source, final StorageType target) {
+    private boolean convertPlayerData(final ConversionType type, final StorageType source, final StorageType target) throws Exception {
         plugin.setConversionLock(true);
         final Quests quests = plugin.getQuests();
         final StorageFactory factory = new StorageFactory(quests);
         final StorageImplementation entry = factory.createNewImplementation(source);
+        entry.init();
         final StorageImplementation exit = factory.createNewImplementation(target);
+        exit.init();
         
-        quests.getOfflineQuesters().forEach((key)->{
-            final UUID uuid = key.getUUID();
+        for (final UUID uuid : entry.getSavedUniqueIds()) {
             try {
                 final Quester quester = entry.loadQuesterData(uuid);
-                exit.saveQuesterData(quester);
-                plugin.getLogger().info("Successfully transferred data of Quester " + uuid.toString());
+                if (quester != null) {
+                    exit.saveQuesterData(quester);
+                    plugin.getLogger().info("Successfully transferred data of Quester " + uuid.toString());
+                }
             } catch (final Exception e) {
                 plugin.getLogger().severe("Failed to transfer data of Quester " + uuid.toString());
             }
-        });
+        }
         entry.close();
         exit.close();
         plugin.setConversionLock(false);

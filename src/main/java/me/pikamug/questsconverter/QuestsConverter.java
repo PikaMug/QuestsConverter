@@ -1,5 +1,7 @@
 package me.pikamug.questsconverter;
 
+import java.util.concurrent.CompletableFuture;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -58,29 +60,39 @@ public class QuestsConverter extends JavaPlugin implements CommandExecutor {
     private boolean qConvertHandler(final CommandSender cs, final String[] args) {
         if (args.length <= 2) {
             showUsage(cs);
-        } else if (args.length > 2) {
-            final ConversionType type = ConversionType.valueOf(args[1].toLowerCase());
-            final StorageType source = StorageType.valueOf(args[2].toLowerCase());
-            final StorageType target = StorageType.valueOf(args[3].toLowerCase());
-            if (type == null || source == null || target == null) {
-                showUsage(cs);
-            } else if (lock) {
-                cs.sendMessage(ChatColor.YELLOW + "Conversion already in progress!");
-            } else {
-                getLogger().info(cs.getName() + " started conversion " + args[2] + " to " + args[3]);
-                if (cs instanceof Player) {
-                    cs.sendMessage(ChatColor.YELLOW + "Starting conversion from " + args[2] + " to " + args[3]);
-                }
-                final Conversion c = new Conversion(this);
-                c.beginConversion(type, source, target);
-            }
+            return false;
         }
-        return false;
+        ConversionType type = null;
+        StorageType source = null;
+        StorageType target = null;
+        try {
+            type = ConversionType.valueOf(args[0].toUpperCase());
+            source = StorageType.valueOf(args[1].toUpperCase());
+            target = StorageType.valueOf(args[2].toUpperCase());
+        } catch (final IllegalArgumentException e) {
+            showUsage(cs);
+            return false;
+        }
+        if (lock) {
+            cs.sendMessage(ChatColor.YELLOW + "Conversion already in progress!");
+        } else {
+            getLogger().info(cs.getName() + " started conversion from " + args[1] + " to " + args[2]);
+            if (cs instanceof Player) {
+                cs.sendMessage(ChatColor.YELLOW + "Starting conversion from " + args[1] + " to " + args[2]);
+            }
+            final Conversion c = new Conversion(this);
+            final CompletableFuture<Boolean> p = c.beginConversion(type, source, target);
+            p.thenRun(() -> cs.sendMessage("[QuestsConverter]" + ChatColor.GREEN + "Done!"));
+        }
+        return true;
     }
     
     private void showUsage(final CommandSender cs) {
-        cs.sendMessage(ChatColor.GOLD + "- Quests Converter -");
-        cs.sendMessage(ChatColor.YELLOW + "Usage: /qconvert playerdata [source] [target]");
-        cs.sendMessage(ChatColor.YELLOW + "Valid sources/targets are: yaml, mysql, custom");
+        cs.sendMessage(ChatColor.YELLOW + "- Quests Converter -");
+        cs.sendMessage(ChatColor.YELLOW + "Usage: " + ChatColor.GOLD + "/qconvert playerdata [source] [target]");
+        cs.sendMessage(ChatColor.YELLOW + "Valid source or target values are:");
+        for (final StorageType type: StorageType.values()) {
+            cs.sendMessage(ChatColor.YELLOW + " - " + ChatColor.LIGHT_PURPLE + type.getName());
+        }
     }
 }
