@@ -52,9 +52,9 @@ public class Conversion {
         
         for (final UUID uuid : entry.getSavedUniqueIds()) {
             try {
-                final Quester quester = entry.loadQuesterData(uuid);
+                final Quester quester = entry.loadQuester(uuid);
                 if (quester != null) {
-                    exit.saveQuesterData(quester);
+                    exit.saveQuester(quester);
                     plugin.getLogger().info("Successfully transferred data of Quester " + uuid.toString());
                 }
             } catch (final Exception e) {

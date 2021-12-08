@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>QuestsConverter</groupId>
   <artifactId>QuestsConverter</artifactId>
-  <version>0.1</version>
+  <version>0.2</version>
   
   <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -14,8 +14,8 @@
           <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
       </repository>
       <repository>
-          <id>jitpack.io</id>
-          <url>https://jitpack.io</url>
+          <id>codemc-repo</id>
+          <url>https://repo.codemc.io/repository/maven-releases/</url>
       </repository>
   </repositories>
   
@@ -27,10 +27,9 @@
           <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>com.github.PikaMug</groupId>
-        <artifactId>Quests</artifactId>
-        <version>master-SNAPSHOT</version>
-        <scope>provided</scope>
+          <groupId>me.blackvein.quests</groupId>
+          <artifactId>quests-api</artifactId>
+          <version>4.1.3</version>
       </dependency>
   </dependencies>
   

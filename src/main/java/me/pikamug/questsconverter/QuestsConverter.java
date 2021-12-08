@@ -62,9 +62,9 @@ public class QuestsConverter extends JavaPlugin implements CommandExecutor {
             showUsage(cs);
             return false;
         }
-        ConversionType type = null;
-        StorageType source = null;
-        StorageType target = null;
+        ConversionType type;
+        StorageType source;
+        StorageType target;
         try {
             type = ConversionType.valueOf(args[0].toUpperCase());
             source = StorageType.valueOf(args[1].toUpperCase());
