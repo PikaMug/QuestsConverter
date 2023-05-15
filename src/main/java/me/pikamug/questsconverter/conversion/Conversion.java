@@ -45,21 +45,32 @@ public class Conversion {
         });
     }
 
-    public CompletableFuture<Boolean> beginConversion(final ConversionType type, final StorageType source, final StorageType target) {
+    public CompletableFuture<Boolean> beginConversion(final ConversionType type,
+                                                      final StorageType source, final StorageType target) {
         return makeFuture(() -> {
             if (type.equals(ConversionType.PLAYERDATA)) {
-                return convertPlayerData(type, source, target);
+                return convertPlayerData(source, target);
             }
             return false;
         });
     }
     
-    private boolean convertPlayerData(final ConversionType type, final StorageType source, final StorageType target) throws Exception {
+    private boolean convertPlayerData(final StorageType source, final StorageType target) throws Exception {
         plugin.setConversionLock(true);
         final Quests quests = plugin.getQuests();
         final StorageFactory factory = new StorageFactory(quests);
+
+        plugin.getLogger().info("Any quests-hikari errors below this can be safely ignored.");
+
         final StorageImplementation entry = factory.createNewImplementation(source);
         entry.init();
+
+        if (entry.getSavedUniqueIds().isEmpty()) {
+            plugin.getLogger().warning("No source data found! Are all config values correct?");
+            entry.close();
+            return false;
+        }
+
         final StorageImplementation exit = factory.createNewImplementation(target);
         exit.init();
         

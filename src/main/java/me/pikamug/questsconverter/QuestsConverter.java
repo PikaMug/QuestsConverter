@@ -67,10 +67,10 @@ public class QuestsConverter extends JavaPlugin implements CommandExecutor {
         return false;
     }
     
-    private boolean qConvertHandler(final CommandSender cs, final String[] args) {
+    private void qConvertHandler(final CommandSender cs, final String[] args) {
         if (args.length <= 2) {
             showUsage(cs);
-            return false;
+            return;
         }
         ConversionType type;
         StorageType source;
@@ -81,7 +81,7 @@ public class QuestsConverter extends JavaPlugin implements CommandExecutor {
             target = StorageType.valueOf(args[2].toUpperCase());
         } catch (final IllegalArgumentException e) {
             showUsage(cs);
-            return false;
+            return;
         }
         if (lock) {
             cs.sendMessage(ChatColor.YELLOW + "Conversion already in progress!");
@@ -92,9 +92,8 @@ public class QuestsConverter extends JavaPlugin implements CommandExecutor {
             }
             final Conversion c = new Conversion(this);
             final CompletableFuture<Boolean> p = c.beginConversion(type, source, target);
-            p.thenRun(() -> cs.sendMessage("[QuestsConverter]" + ChatColor.GREEN + "Done!"));
+            p.thenRun(() -> cs.sendMessage("[QuestsConverter] " + ChatColor.GREEN + "Done!"));
         }
-        return true;
     }
     
     private void showUsage(final CommandSender cs) {

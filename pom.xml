@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>me.pikamug.questsconverter</groupId>
   <artifactId>QuestsConverter</artifactId>
-  <version>0.3</version>
+  <version>0.4</version>
   
   <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -29,12 +29,12 @@
       <dependency>
           <groupId>me.blackvein.quests</groupId>
           <artifactId>quests-api</artifactId>
-          <version>4.2.0</version>
+          <version>4.8.2</version>
       </dependency>
       <dependency>
           <groupId>me.blackvein.quests</groupId>
           <artifactId>quests-core</artifactId>
-          <version>4.2.0</version>
+          <version>4.8.2</version>
       </dependency>
   </dependencies>
   
