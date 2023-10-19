@@ -14,6 +14,8 @@ package me.pikamug.questsconverter;
 
 import java.util.concurrent.CompletableFuture;
 
+import me.pikamug.quests.Quests;
+import me.pikamug.quests.enums.StorageType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -22,8 +24,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.blackvein.quests.Quests;
-import me.blackvein.quests.storage.StorageType;
 import me.pikamug.questsconverter.conversion.Conversion;
 import me.pikamug.questsconverter.conversion.ConversionType;
 

@@ -17,12 +17,11 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
-import me.blackvein.quests.Quester;
-import me.blackvein.quests.Quests;
-import me.blackvein.quests.player.IQuester;
-import me.blackvein.quests.storage.StorageFactory;
-import me.blackvein.quests.storage.StorageType;
-import me.blackvein.quests.storage.implementation.StorageImplementation;
+import me.pikamug.quests.BukkitQuestsPlugin;
+import me.pikamug.quests.enums.StorageType;
+import me.pikamug.quests.player.Quester;
+import me.pikamug.quests.storage.BukkitStorageFactory;
+import me.pikamug.quests.storage.implementation.QuesterStorageImpl;
 import me.pikamug.questsconverter.QuestsConverter;
 
 public class Conversion {
@@ -57,12 +56,12 @@ public class Conversion {
     
     private boolean convertPlayerData(final StorageType source, final StorageType target) throws Exception {
         plugin.setConversionLock(true);
-        final Quests quests = plugin.getQuests();
-        final StorageFactory factory = new StorageFactory(quests);
+        final BukkitQuestsPlugin quests = (BukkitQuestsPlugin) plugin.getQuests();
+        final BukkitStorageFactory factory = new BukkitStorageFactory(quests);
 
         plugin.getLogger().info("Any quests-hikari errors below this can be safely ignored.");
 
-        final StorageImplementation entry = factory.createNewImplementation(source);
+        final QuesterStorageImpl entry = factory.createNewImplementation(source);
         entry.init();
 
         if (entry.getSavedUniqueIds().isEmpty()) {
@@ -71,12 +70,12 @@ public class Conversion {
             return false;
         }
 
-        final StorageImplementation exit = factory.createNewImplementation(target);
+        final QuesterStorageImpl exit = factory.createNewImplementation(target);
         exit.init();
         
         for (final UUID uuid : entry.getSavedUniqueIds()) {
             try {
-                final IQuester quester = entry.loadQuester(uuid);
+                final Quester quester = entry.loadQuester(uuid);
                 if (quester != null) {
                     exit.saveQuester(quester);
                     plugin.getLogger().info("Successfully transferred data of Quester " + uuid.toString());
